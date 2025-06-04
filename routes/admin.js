@@ -1,6 +1,6 @@
 const{Router} = require("express");
 const adminRouter = Router();
-
+const adminModal = require("../db");
 adminRouter.post('/signup', (req, res) => {
     res.json({
         message: 'User signup endpoint'
