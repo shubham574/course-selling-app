@@ -4,8 +4,8 @@ const {adminRouter} = require("./routes/admin");
 const {courseRouter }= require("./routes/course");
 const mongoose = require("mongoose");
 require("dotenv").config(); 
-
-const app = express()
+const app = express();
+app.use(express.json());
 const port = 3000
 
 app.use("/user", userRouter);
@@ -19,5 +19,4 @@ async function main(){
    console.log(`App listening on port ${port}`)
  })
 }
-
 main()
