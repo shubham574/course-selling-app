@@ -4,7 +4,9 @@ const adminModal = require("../db");
 const bcrypt =  require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { z } = require("zod");
-const JWT_SECRET ="absd123@123";
+const {JWT_ADMIN_SECRET} = require("../config");
+const { adminMiddleware } = require("../middleware/admin");
+
 
 const signupSchema = z.object({
     email: z.string().email("Invalid email format"),
@@ -62,7 +64,7 @@ adminRouter.post('/signin', async(req, res) => {
     if (passwordMatch) {
         const token = jwt.sign({
             id: response._id.toString()
-        }, JWT_SECRET);
+        }, JWT_ADMIN_SECRET);
         res.json({
             message: "Admin signed in successfully",
             token: token
@@ -73,10 +75,23 @@ adminRouter.post('/signin', async(req, res) => {
         });
     }
 })
-adminRouter.post('/course', (req, res) => {
+
+adminRouter.post('/course', adminMiddleware,async(req, res) => {
+    const adminId = req.userId;
+    const { title, description, imageUrl, price } = req.body;
+    const course = await courseModal.create({
+        title: title,
+        description: description,
+        imageUrl: imageUrl,
+        price: price,
+        creatorId: adminId
+    });
+
     res.json({
-        message: 'User signin endpoint'
-    })
+        message: "Course created successfully",
+        courseId: course._id
+    });
+
 })
 adminRouter.put('/course', (req, res) => {
     res.json({

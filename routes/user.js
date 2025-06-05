@@ -4,8 +4,7 @@ const userModal = require("../db");
 const bcrypt =  require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { z } = require("zod");
-const JWT_SECRET ="absd123@123";
-
+const {JWT_USER_SECRET} = require("../config");
 const signupSchema = z.object({
     email: z.string().email("Invalid email format"),
     password: z.string().min(6, "Password must be at least 6 characters long"),
@@ -63,7 +62,7 @@ userRouter.post('/signin', async(req, res) => {
        if (passwordMatch) {
            const token = jwt.sign({
                id: response._id.toString()
-           }, JWT_SECRET);
+           }, JWT_USER_SECRET);
            res.json({
                message: "User signed in successfully",
                token: token
