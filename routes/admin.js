@@ -93,7 +93,7 @@ adminRouter.post('/course', adminMiddleware,async(req, res) => {
     });
 
 })
-adminRouter.put('/course', async(req, res) => {
+adminRouter.put('/course', adminMiddleware,async(req, res) => {
      const adminId = req.userId;
     const { title, description, imageUrl, price } = req.body;
     const course = await courseModal.updateOne({
