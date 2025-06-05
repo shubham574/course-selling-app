@@ -114,10 +114,16 @@ adminRouter.put('/course', adminMiddleware,async(req, res) => {
 })
 
 
-adminRouter.get('/course/bulk', (req, res) => {
+adminRouter.get('/course/bulk', async(req, res) => {
+    const adminId = req.userId;
+
+    const course = await courseModal.find({
+        creatorId: adminId
+    });
     res.json({
-        message: 'User signin endpoint'
-    })
+        message: "Courses fetched successfully",
+        courses: course
+})
 })
 
 module.exports ={
