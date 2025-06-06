@@ -77,8 +77,15 @@ userRouter.post('/signin', async(req, res) => {
    })
 
 
-userRouter.get('/purchases', (req, res) => {
+userRouter.get('/purchases', async(req, res) => {
+    const userId = req.userId;
+    const purchases = await userModal.purchaseModal.find({
+        userId
+    })
 
+    res.json({
+        purchases
+    })
 })
 
 

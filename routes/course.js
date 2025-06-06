@@ -4,7 +4,7 @@ const {  purchaseModal } = require("../db");
 const courseRouter = Router();
 
 
-courseRouter.post('/purchase', async(req, res) => {
+courseRouter.post('/purchase',userMiddleware, async(req, res) => {
 
     const userId = req.userId;
     const courseId = req.body.courseId;
