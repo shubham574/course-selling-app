@@ -1,6 +1,6 @@
 const {Router} = require("express");
 const userRouter = Router();
-const userModal = require("../db");
+const {userModal, purchaseModal, courseModal} = require("../db");
 const bcrypt =  require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { z } = require("zod");
@@ -79,12 +79,15 @@ userRouter.post('/signin', async(req, res) => {
 
 userRouter.get('/purchases', async(req, res) => {
     const userId = req.userId;
-    const purchases = await userModal.purchaseModal.find({
-        userId
+    const purchases = await purchaseModal.find({
+        userId,
     })
-
+    const courseData = await courseModal.find({
+        _id: { $in: purchases.map(x=> x.courseId) }
+    });
     res.json({
-        purchases
+        purchases,
+        courseData
     })
 })
 
