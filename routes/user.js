@@ -5,6 +5,8 @@ const bcrypt =  require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { z } = require("zod");
 const {JWT_USER_SECRET} = require("../config");
+
+
 const signupSchema = z.object({
     email: z.string().email("Invalid email format"),
     password: z.string().min(6, "Password must be at least 6 characters long"),

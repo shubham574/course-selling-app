@@ -1,6 +1,7 @@
 const{Router} = require("express");
 const adminRouter = Router();
 const adminModal = require("../db");
+const courseModal = require("../db");
 const bcrypt =  require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { z } = require("zod");
@@ -79,7 +80,7 @@ adminRouter.post('/signin', async(req, res) => {
 adminRouter.post('/course', adminMiddleware,async(req, res) => {
     const adminId = req.userId;
     const { title, description, imageUrl, price } = req.body;
-    const course = await courseModal.create({
+    const course = await courseModal.courseModal.create({
         title: title,
         description: description,
         imageUrl: imageUrl,
@@ -95,9 +96,9 @@ adminRouter.post('/course', adminMiddleware,async(req, res) => {
 })
 adminRouter.put('/course', adminMiddleware,async(req, res) => {
      const adminId = req.userId;
-    const { title, description, imageUrl, price } = req.body;
-    const course = await courseModal.updateOne({
-        _id:courseId,
+    const {courseId, title, description, imageUrl, price } = req.body;
+    const course = await courseModal.courseModal.updateOne({
+        _id: courseId,
         creatorId: adminId
     },{
         title: title,
@@ -117,13 +118,13 @@ adminRouter.put('/course', adminMiddleware,async(req, res) => {
 adminRouter.get('/course/bulk', async(req, res) => {
     const adminId = req.userId;
 
-    const course = await courseModal.find({
+    const courses = await courseModal.courseModal.find({
         creatorId: adminId
     });
     res.json({
         message: "Courses fetched successfully",
-        courses: course
-})
+        courses
+    })
 })
 
 module.exports ={
